@@ -11,7 +11,7 @@ def get_football_games(config: AppConfig, competition_id):
         response = requests.get(url, headers=headers)
         matches = response.json()['matches']
         if len(matches) == 0:
-            NoDataReturned()
+            raise NoDataReturned
         return sorted(matches, key=lambda d: d['utcDate'], reverse=True)
     except Exception:
         raise
@@ -19,13 +19,13 @@ def get_football_games(config: AppConfig, competition_id):
 def get_nba_games(config: AppConfig = None):
     url = f"{config.BASKETBALL_URL}/v1/games"
     headers = {"Authorization": config.BASKETBALL_API_KEY}
-    params={"per_page": 40}
 
-    response = requests.get(url, headers=headers, params=params)
+    response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        data = response.json()
+        data = response.json()['data']
         if len(data) == 0:
-            NoDataReturned()
+            raise NoDataReturned
         return data
     else:
-        raise Exception
+        return []
+    

@@ -1,9 +1,63 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Basketball Results</title>
+</head>
 <body>
+    <h1>Basketball results</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Home Team</th>
+                <th>Away Team</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Home Team Score</th>
+                <th>Away Team Score</th>
+                <th>Winner</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for match in page_matches %}
+            <tr>
+                <td>{{ match.home_team.full_name }}</td>
+                <td>{{ match.visitor_team.full_name }}</td>
+                <td>{{ match.date }}</td>
+                <td>{{ match.status }}</td>
+                <td>{{ match.home_team_score }}</td>
+                <td>{{ match.visitor_team_score }}</td>
+                <td>
+                    {% if match.home_team_score > match.visitor_team_score %}
+                        {{ match.home_team.name }}
+                    {% elif match.home_team_score < match.visitor_team_score %}
+                        {{ match.visitor_team.name }}
+                    {% else %}
+                        Draw
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-<h1>Hello World!</h1>
-<p>Welcome to my first Django project!</p>
+    {% if page_matches.has_other_pages %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_matches.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_matches.previous_page_number }}">previous</a>
+            {% endif %}
 
+            <span class="current">
+                Page {{ page_matches.number }} of {{ page_matches.paginator.num_pages }}.
+            </span>
+
+            {% if page_matches.has_next %}
+                <a href="?page={{ page_matches.next_page_number }}">next</a>
+                <a href="?page={{ page_matches.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
 </body>
 </html>
