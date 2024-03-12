@@ -27,13 +27,13 @@
                 <td>{{ match.home_team_score }}</td>
                 <td>{{ match.visitor_team_score }}</td>
                 <td>
-                    {% if match.home_team_score > match.visitor_team_score %}
+                    <!-- {% if match.home_team_score > match.visitor_team_score %}
                         {{ match.home_team.name }}
                     {% elif match.home_team_score < match.visitor_team_score %}
                         {{ match.visitor_team.name }}
                     {% else %}
                         Draw
-                    {% endif %}
+                    {% endif %} -->
                 </td>
             </tr>
             {% endfor %}

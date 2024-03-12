@@ -16,7 +16,7 @@ def get_football_games(config: AppConfig, competition_id):
     except Exception:
         raise
 
-def get_nba_games(config: AppConfig = None):
+def get_nba_games(config: AppConfig):
     url = f"{config.BASKETBALL_URL}/v1/games"
     headers = {"Authorization": config.BASKETBALL_API_KEY}
 
