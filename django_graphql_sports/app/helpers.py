@@ -1,24 +1,31 @@
 import requests
+from django_graphql_sports.config import AppConfig
 
-def get_football_games(competition_id):
-    url = f"https://api.football-data.org/v4/competitions/{competition_id}/matches?"
-    headers = {"X-Auth-Token": "ea32770561614c50b01e46b75c957eee"}
+class NoDataReturned(Exception):
+    pass
 
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return response.json()['matches']
-    
-    else:
-        return []
-    
-def get_nba_games():
-    url = "http://api.balldontlie.io/v1/games"
-    headers = {"Authorization": "b2a89977-91d6-4f8b-9075-583f7fe20edc"}  #the api key shouldn't be here 
+def get_football_games(config: AppConfig, competition_id):
+    url = f"{config.FOOTBALL_URL}/v4/competitions/{competition_id}/matches"
+    headers = {"X-Auth-Token": config.FOOTBALL_API_KEY}
+    try:
+        response = requests.get(url, headers=headers)
+        matches = response.json()['matches']
+        if len(matches) == 0:
+            NoDataReturned()
+        return sorted(matches, key=lambda d: d['utcDate'], reverse=True)
+    except Exception:
+        raise
+
+def get_nba_games(config: AppConfig = None):
+    url = f"{config.BASKETBALL_URL}/v1/games"
+    headers = {"Authorization": config.BASKETBALL_API_KEY}
     params={"per_page": 40}
 
     response = requests.get(url, headers=headers, params=params)
     if response.status_code == 200:
         data = response.json()
+        if len(data) == 0:
+            NoDataReturned()
         return data
     else:
-        return None, None
+        raise Exception

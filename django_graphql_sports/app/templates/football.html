@@ -14,6 +14,7 @@
                 <th>Status</th>
                 <th>Home Team Score</th>
                 <th>Away Team Score</th>
+                <th>Winner</th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +26,7 @@
                 <td>{{ match.status }}</td>
                 <td>{{ match.score.fullTime.home }}</td>
                 <td>{{ match.score.fullTime.away }}</td>
+                <td>{{ match.score.winner }}</td>
             </tr>
             {% endfor %}
         </tbody>
