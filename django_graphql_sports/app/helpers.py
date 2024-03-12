@@ -19,13 +19,12 @@ def get_football_games(config: AppConfig, competition_id):
 def get_nba_games(config: AppConfig):
     url = f"{config.BASKETBALL_URL}/v1/games"
     headers = {"Authorization": config.BASKETBALL_API_KEY}
-
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        data = response.json()['data']
-        if len(data) == 0:
+    try:
+        response = requests.get(url, headers=headers)
+        matches = response.json()['data']
+        if len(matches) == 0:
             raise NoDataReturned
-        return data
-    else:
-        return []
+        return sorted(matches, key=lambda d: d['date'], reverse=True)
+    except Exception:
+        raise
     
